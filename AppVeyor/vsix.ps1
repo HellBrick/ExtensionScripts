@@ -9,13 +9,12 @@ function Vsix-PushArtifacts {
     [cmdletbinding()]
     param (
         [Parameter(Position=0, Mandatory=0,ValueFromPipeline=$true)]
-        [string]$path = "./*.vsix",
+        [string]$path = "*.vsix",
 
         [switch]$publishToGallery
     )
     process {
-        foreach($filePath in $path) {
-            $fileName = (Get-ChildItem $filePath -Recurse)[0] # Instead of taking the first, support multiple vsix files
+        foreach($fileName in (Get-ChildItem -Filter $path -Recurse -File)) {
 
             if (Get-Command Update-AppveyorBuild -errorAction SilentlyContinue)
             {
